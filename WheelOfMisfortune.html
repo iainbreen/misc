@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Wheel of Names</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-73612537-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+
+  <body>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-7">
+          <canvas id="myCanvas" style="width:100%;height:auto" width="800" height="800" onClick="spin()"></canvas>
+        </div>
+        <div class="col-md-3">
+          <br/><br/>
+          <textarea id="names" placeholder="Paste in contestants' names here, one name per line" class="form-control" style="vertical-align:top;width:300px;height:600px"></textarea>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" id="only_email">Only allow valid email addresses
+            </label>
+          </div>
+
+          <button class="btn btn-default" data-toggle="modal" data-target="#socialMediaModal">
+            Get social media users
+          </button>
+          <button class="btn btn-default" onclick="addNamesToWheel()">
+            Add names to wheel
+          </button>
+          <br><br>
+          <button class="btn btn-primary" onclick="spin()">
+            Spin!
+          </button>
+          <button class="btn btn-default" data-toggle="modal" data-target="#creditsModal">
+            Credits
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="winnerModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            <h4 class="modal-title" id="winnerModalLabel">We have a winner!</h4>
+          </div>
+          <div class="modal-body">
+            <p class="h1" id="winner_name"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="removeWinner();drawWheel(myWheel);">Remove winner</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="addedNamesModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            <h4 class="modal-title">Note</h4>
+          </div>
+          <div class="modal-body" id="messages">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="socialMediaModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            <h4 class="modal-title">Get social media users</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="search_term">Search term</label>
+              <input type="text" class="form-control" placeholder="For example: #gdg" id="search_term">
+            </div>
+            <small>
+              This search will fetch the users who have posted recently on
+              Twitter and Google+ mentioning the search term. The most recent
+              200 tweets and 200 Google+ posts are considered and no post older
+              than 24 hours is included. Twitter user names will start with "@".
+              Google+ user names will start with "+".
+            </small>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="get_social_media_users" onclick="getSocialMediaUsersAndClose()">Get users</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="creditsModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            <h4 class="modal-title">Credits and License</h4>
+          </div>
+          <div class="modal-body">
+            The Google logo is the property of Google, Inc. For other uses of
+            the logo, see
+            <a href="https://www.google.com/permissions/using-the-logo.html">
+            here</a>.
+            <br/>
+            <br/>
+            The sound effects were downloaded from 
+            <a href="http://soundbible.com">SoundBible.com</a> and are used
+            (unmodified) under the
+            <a href="https://creativecommons.org/licenses/by/3.0/us/">
+            Creative Commons Attribution 3.0 license</a>.
+            They have been recorded by:
+            <ul>
+              <li>Hole Punch: Simon Craggs</li>
+              <li>Tick: DeepFrozenApps</li>
+              <li>Applause: Yannick Lemieux</li>
+            </ul>
+            The code for this web app was written by Martin Omander,
+            Google Developer Relations
+            (<a href="https://plus.google.com/+MartinOmander/posts">Google+ profile</a>,
+            <a href="https://twitter.com/martinomander">Twitter profile</a>).
+            If you like this app or have ideas for improvements, let me know!
+            <br/>
+            <br/>
+            This app runs on
+            <a href="https://cloud.google.com/appengine/">App Engine</a>,
+            Google's platform for building scalable web applications and mobile
+            backends. Just upload your code and Google will manage your app's
+            availability. There are no servers for you to provision or maintain.
+            Sweet!
+            <br/>
+            <br/>
+            To find out more about Google's developer offerings, go to
+            <a href="https://developers.google.com">developers.google.com</a>.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      //
+      // ImageCache class, used for loading images and keeping them in memory,
+      // so animations using those images don't flicker.
+      //
+      function ImageCache () {
+        this.images = new Object();
+
+        this.addImage = function(imageName) {
+          this.images[imageName] = new Image();
+          this.images[imageName].src = imageName;
+        };
+
+        this.getImage = function(imageName) {
+          if (imageName in this.images) {
+            return this.images[imageName];
+          }
+          else {
+            throw 'Image ' + imageName + ' not found in ImageCache!';
+          }
+        };
+      }
+
+
+      //
+      // Wheel class, used for keeping track of angle and speed of the spinning
+      // wheel and the names in it.
+      //
+      function Wheel () {
+        this.names = [];
+        this.angle = 0;
+        this.speed = 0;
+        this.nameLastTick = '';
+
+        this.setNames = function(names) {
+          this.names = names;
+        }
+
+        this.startSpin = function() {
+          this.speed = .5 + Math.random() / 10.0;
+        }
+
+        this.tick = function() {
+          // If the arrow points to a new name compared to the last time the
+          // wheel was drawn, play the 'tick' sound.
+          if (this.nameLastTick != this.getResult()) {
+            this.nameLastTick = this.getResult();
+            tickSound.pause();
+            tickSound.currentTime = 0;
+            tickSound.play();
+          }
+          // Move the wheel.
+          this.angle += this.speed;
+          if (this.angle > Math.PI * 2) {
+            this.angle -= Math.PI * 2;
+          }
+          // Reduce the wheel's speed by 1%.
+          this.speed = this.speed * .99;
+          // Stop the wheel if it's very slow.
+          if (this.speed < 0.002) {
+            this.speed = 0;
+          }
+        }
+
+        this.getResult = function() {
+          var radiansPerSegment = 2 * Math.PI / this.names.length;
+          var index = this.angle / radiansPerSegment;
+          index = Math.round(index);
+          if (index >= this.names.length) {
+            index = 0;
+          }
+          var result = this.names[index];
+          return result;
+        }
+
+        this.removeName = function(name) {
+          this.names.splice(this.names.indexOf(name), 1);
+        }
+      }
+
+
+      //
+      // TextBox class, which encapsulates a <textarea>. It contains methods for
+      // filtering the user-entered content in the area.
+      //
+      function TextBox (formField) {
+        this.formField = formField;
+
+        this.removeBlankLines = function() {
+          var newLines = [];
+          var lines = this.getEntries();
+          for (var i = 0; i < lines.length; i++) {
+            var thisLine = lines[i];
+            if (thisLine.length > 0) {
+              newLines.push(thisLine);
+            }
+          }
+          this.setEntries(newLines);
+        }
+
+        this.removeDuplicateLines = function() {
+          var newLines = [];
+          var duplicates = 0;
+          var lines = this.getEntries();
+          for (var i = 0; i < lines.length; i++) {
+            var thisLine = lines[i];
+            if (newLines.indexOf(thisLine) == -1) {
+              newLines.push(thisLine);
+            }
+            else {
+              duplicates += 1;
+            }
+          }
+          this.setEntries(newLines);
+          return duplicates;
+        }
+
+        this.removeInvalidEmailAddresses = function() {
+          var newLines = [];
+          var invalidEmails = 0;
+          var lines = this.getEntries();
+          for (var i = 0; i < lines.length; i++) {
+            var thisLine = lines[i].trim();
+            if (this.isValidEmailAddress(thisLine)) {
+              newLines.push(thisLine);
+            }
+            else {
+              invalidEmails += 1;
+            }
+          }
+          this.setEntries(newLines);
+          return invalidEmails;
+        }
+
+        this.isValidEmailAddress = function(address) {
+          var re = 
+            /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+          return re.test(address);
+        }
+
+        this.getEntries = function() {
+          return this.formField.value.replace(/\r\n/g, "\n").split("\n");
+        }
+
+        this.setEntries = function(entries) {
+          this.formField.value = entries.join('\n');
+        }
+
+        this.appendEntries = function(entries) {
+          if (this.formField.value) {
+            this.formField.value += '\n';
+          }
+          this.formField.value += entries.join('\n');
+        }
+
+        this.removeEntry = function(entry) {
+          var lines = this.getEntries();
+          lines.splice(lines.indexOf(entry), 1);
+          this.formField.value = lines.join('\n');
+        }
+      }
+
+
+      //
+      // Extra methods added to the Array class, which simplify drawing of
+      // random elements from the array.
+      //
+      Array.prototype.getOneRandomElement = function() {
+        return this[Math.floor(Math.random() * this.length)];
+      }
+
+      Array.prototype.getRandomElements = function(numberOfElementsToGet) {
+        var retval = [];
+        var clone = this.slice(0);
+        for (var i = 0; i < numberOfElementsToGet; i++) {
+          if (clone.length == 0) {
+            break;
+          }
+          else {
+            var element = clone.getOneRandomElement();
+            retval.push(element);
+            // Remove the picked element so we don't pick it again.
+            clone.splice(clone.indexOf(element), 1);
+          }
+        }
+        return retval;
+      }
+
+
+      //
+      // Global variables and initial drawing of the empty wheel.
+      //
+      var imageCache;
+      var myWheel = new Wheel();
+      var myTextBox = new TextBox(document.getElementById('names'));
+      myTextBox.setEntries(['Lori', 'Sandra', 'Cameron', 'Emma', 'Susanne',
+          'Amanda', 'Felipe', 'Shanti']);
+      addNamesToWheel();
+      drawWheel(myWheel);
+      var crowdSound = new Audio("SMALL_CROWD_APPLAUSE-Yannick_Lemieux-1268806408.mp3");
+      var tickSound = new Audio("Tick-DeepFrozenApps-397275646.mp3");
+      var holePunchSound = new Audio("Hole_Punch-Simon_Craggs-1910998415.mp3");
+
+
+      //
+      // Event handlers, triggered by the user clicking a button.
+      //
+      function spin() {
+        ga('send', 'event', 'Wheel', 'Spin', '');
+        myWheel.startSpin();
+        animateWheel(myWheel);
+      }
+
+      function addNamesToWheel() {
+        ga('send', 'event', 'Wheel', 'AddNames', '');
+        if (holePunchSound) {
+          holePunchSound.play();
+        }
+        var MAX_WHEEL_ENTRIES = 48;
+        myTextBox.removeBlankLines();
+        var duplicates = myTextBox.removeDuplicateLines();
+        var invalidEmails = 0;
+        if (document.getElementById('only_email').checked) {
+          invalidEmails = myTextBox.removeInvalidEmailAddresses();
+        }
+        var entries = myTextBox.getEntries();
+        myWheel.setNames(entries.getRandomElements(MAX_WHEEL_ENTRIES));
+        drawWheel(myWheel);
+        var messages = [];
+        if (duplicates > 0) {
+          messages.push('There were ' + duplicates + ' duplicate entries in ' +
+            'the text box. They were removed.');
+        }
+        if (invalidEmails > 0) {
+          messages.push('There were ' + invalidEmails + ' invalid email ' +
+            'addresses in the text box. They were removed.');
+        }
+        if (entries.length > MAX_WHEEL_ENTRIES) {
+          messages.push('There were ' + entries.length + ' unique entries in ' +
+            'the text box. Of these, ' + MAX_WHEEL_ENTRIES + ' randomly ' +
+            'picked entries were added to the wheel, to keep it legible.');
+        }
+        if (messages.length > 0) {
+          document.getElementById('messages').innerHTML = '';
+          for (var i = 0; i < messages.length; i++) {
+            document.getElementById('messages').innerHTML += '<p>' + 
+              messages[i] + '</p>';
+          }
+          $('#addedNamesModal').modal();
+        }
+      }
+
+      function removeWinner() {
+        ga('send', 'event', 'Wheel', 'RemoveWinner', '');
+        holePunchSound.play();
+        var winnerName = myWheel.getResult()
+        myWheel.removeName(winnerName);
+        myTextBox.removeEntry(winnerName);
+      }
+
+      function getSocialMediaUsersAndClose() {
+        ga('send', 'event', 'Wheel', 'GetSocialMediaUsers', '');
+        var callsFinished = 0;
+        var urls = ['/twitter', '/googleplus'];
+        // Set cursor and button to waiting state.
+        $('html,body,button').css('cursor', 'wait');
+        $('#get_social_media_users').prop('disabled', true);
+        // Ask the server for the users who have posted about the term.
+        for (var i=0; i<urls.length; i++) {
+          $.ajax({
+            method: "GET",
+            url: urls[i],
+            data: {term: $('#search_term').val()},
+            dataType: "json",
+          })
+          .done(function(data) {
+            if (data.users) {
+              // Add the returned users to the text box.
+              myTextBox.appendEntries(data.users);
+            }
+            if (data.error) {
+              // Error from an exception caught during code execution.
+              alert(data.error);
+            }
+          })
+          .fail(function(error) {
+            // Error not caught on the server, likely 'Internal Server Error'.
+            alert(error.statusText);
+          })
+          .always(function() {
+            callsFinished++;
+            if (callsFinished == 2) {
+              // Reset cursor and button from waiting state.
+              $('html,body,button').css('cursor', 'auto');
+              $('#get_social_media_users').prop('disabled', false);
+              // Close the modal window.
+              holePunchSound.play();
+              $('#socialMediaModal').modal('hide');
+            }
+          });
+        }
+      }
+
+      //
+      // Method for drawing a snapshot in time of the spinning wheel. It is 
+      // called by the animation code many times per second.
+      //
+      function drawWheel(myWheel) {
+        var canvas = document.getElementById('myCanvas');
+        var context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        if (!imageCache) {
+          imageCache = new ImageCache();
+          imageCache.addImage('google_logo.png');
+        }
+        context.save();
+        context.translate(context.canvas.width / 2, context.canvas.height / 2);
+        context.rotate(myWheel.angle);
+        var radiansPerSegment = 2 * Math.PI / myWheel.names.length;
+        var colors = ['#3369E8', '#D50F25', '#EEB211', '#009925'];
+        var wheelRadius = context.canvas.width * .45;
+        for (var i = 0; i < myWheel.names.length; i++) {
+          context.beginPath();
+          context.moveTo(0, 0);
+          context.arc(0, 0, wheelRadius, -radiansPerSegment/2, radiansPerSegment/2);
+          context.lineTo(0, 0);
+          context.fillStyle = colors[i % colors.length];
+          context.fill();
+          context.lineWidth = 1;
+          context.strokeStyle = '#333333';
+          context.stroke();
+          context.fillStyle = 'black';
+          context.font = '16pt Helvetica';
+          context.textBaseline = 'middle';
+          context.textAlign = 'end';
+          context.fillText(getNameForPrintingOnWheel(myWheel.names[i]), wheelRadius - 10, 0);
+          context.rotate(-radiansPerSegment);
+        }
+        context.restore();
+        // Draw center circle, to reduce weird line effects.
+        context.save();
+        context.translate(context.canvas.width / 2, context.canvas.height / 2);
+        context.fillStyle = 'white';
+        context.beginPath();
+        context.arc(0, 0, wheelRadius/5, 0, Math.PI * 2);
+        context.fill();
+        context.lineWidth = 2;
+        context.strokeStyle = '#333333';
+        context.stroke();
+        context.restore();
+        // Draw Google logo in the center.
+        context.save();
+        context.translate(context.canvas.width / 2, context.canvas.height / 2);
+        context.rotate(myWheel.angle);
+        var image = imageCache.getImage('google_logo.png');
+        context.drawImage(image, -image.width/2, -image.height/2);
+        context.restore();
+        // Draw triangle that points to the winner.
+        context.save();
+        context.translate(context.canvas.width / 2, context.canvas.height / 2);
+        context.beginPath();
+        context.moveTo(wheelRadius - 10, 0);
+        context.lineTo(wheelRadius + 30, -20);
+        context.lineTo(wheelRadius + 30, 20);
+        context.lineTo(wheelRadius - 10, 0);
+        context.fillStyle = 'lightgray';
+        context.fill();
+        context.lineWidth = 2;
+        context.strokeStyle = '#333333';
+        context.stroke();
+        context.restore();
+      }
+
+      function getNameForPrintingOnWheel(fullName) {
+        if (fullName.length <= 22) {
+          return fullName;
+        }
+        else {
+          return fullName.substring(0, 21) + '…';
+        }
+      }
+
+      // Hack to set focus to the text box in the social media modal.
+      // See http://getbootstrap.com/javascript/#modals for why it's needed.
+      $('#socialMediaModal').on('shown.bs.modal', function () {
+        $('#search_term').focus();
+      })
+
+      // If the user hits Enter while in the search_term field, treat it as
+      // if they clicked the button next to the field.
+      $('#search_term').keyup(function(e) {
+          if(e.which == 13) {
+              $('#get_social_media_users').click();
+          }
+      });
+
+      //
+      // Code to drive the animation of the spinning wheel.
+      //
+      window.requestAnimFrame = (function(callback) {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+        function(callback) {
+          window.setTimeout(callback, 1000 / 60);
+        };
+      })();
+
+      function animateWheel(myWheel) {
+        myWheel.tick();
+        drawWheel(myWheel);
+        if (myWheel.speed > 0) {
+          requestAnimFrame(function() {
+            animateWheel(myWheel);
+          });
+        }
+        else {
+          setTimeout(function() {
+            document.getElementById('winner_name').innerHTML = myWheel.getResult();
+            $('#winnerModal').modal();
+            crowdSound.play();
+          }, 1000);
+        }
+      }
+
+    </script>
+  </body>
+</html>
