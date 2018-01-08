@@ -3,18 +3,10 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Wheel of Names</title>
+    <title>Wheel of Misfortune!</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-73612537-1', 'auto');
-      ga('send', 'pageview');
-    </script>
   </head>
 
   <body>
@@ -356,8 +348,11 @@
       var imageCache;
       var myWheel = new Wheel();
       var myTextBox = new TextBox(document.getElementById('names'));
-      myTextBox.setEntries(['Lori', 'Sandra', 'Cameron', 'Emma', 'Susanne',
-          'Amanda', 'Felipe', 'Shanti']);
+      myTextBox.setEntries(['Learning & Development (Anita)', 'Internal Resources (Anita)', 'CS Analytics (Ryan)', 
+                            'Shift Planning (Juci & Casey)', 'Internal Tools (Iain)',
+                            'Hiring (Ruth & Sabrina)', 'Processes (Leanne & Anita)', 'Convo Allocation (Leanne & Kevin)', 
+                            'External / Community Support (Sharon)', 'Internal Communication (Sabrina)',
+                           'Working with Sales (Abbey & Leanne)']);
       addNamesToWheel();
       drawWheel(myWheel);
       var crowdSound = new Audio("SMALL_CROWD_APPLAUSE-Yannick_Lemieux-1268806408.mp3");
