@@ -51,15 +51,18 @@ dimwishlist:item=602618796&perks=1840239774,106909392,4071163871,3425386926
 dimwishlist:item=602618796&perks=1840239774,106909392,4071163871,2458213969
 
 
-// Gnawing Hunger (god-pve)
+// Gnawing Hunger - PvE God Roll (god-pve)
+//notes: PvE God Roll tags:god-pve
 dimwishlist:item=821154603&perks=839105230,106909392,1820235745,1015611457
 
 
-// Gnawing Hunger (god-pvp)
+// Gnawing Hunger - PVP God Roll (god-pvp)
+//notes: PvP God Roll tags:god-pvp
 dimwishlist:item=821154603&perks=839105230,3142289711,2387244414,1015611457
 
 
-// Gnawing Hunger (pve)
+// Gnawing Hunger - PvE Good Roll (pve)
+//notes: PvE Good Roll tags:good-pve
 dimwishlist:item=821154603&perks=839105230,1087426260,1820235745,3425386926
 dimwishlist:item=821154603&perks=839105230,1087426260,1820235745,1015611457
 dimwishlist:item=821154603&perks=839105230,1087426260,1820235745,3523296417
@@ -197,7 +200,8 @@ dimwishlist:item=821154603&perks=1840239774,106909392,2869569095,2458213969
 dimwishlist:item=821154603&perks=1840239774,106909392,2869569095,4082225868
 
 
-// Gnawing Hunger (pvp)
+// Gnawing Hunger - PvP Good Roll (pvp)
+//notes: PvP Good Roll tags:good-pvp
 dimwishlist:item=821154603&perks=839105230,3142289711,1890422124,1015611457
 dimwishlist:item=821154603&perks=839105230,3142289711,1890422124,3523296417
 dimwishlist:item=821154603&perks=839105230,3142289711,2387244414,1015611457
