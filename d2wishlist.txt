@@ -1,3 +1,7 @@
-// Reed's Regret
-//notes: Iain's roll test
-dimwishlist:item=1399243961&perks=2057203855,3661387068,2969185026,1866048759,3425386926,4248210736,2788909693,1590375901,0,2285418970
+title:Iain's S15 Wishlist
+description:Iain's S15 Wishlist
+
+// Reed's Regret (pve,controller)
+dimwishlist:item=1399243961&perks=4090651448,1687452232,3400784728,1546637391
+
+
